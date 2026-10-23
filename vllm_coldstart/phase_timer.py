@@ -1,4 +1,4 @@
-"""Per-phase startup timing for the vLLM v0.30.0 GPU worker.
+"""Per-phase startup timing for the vLLM v0.32.0 GPU worker.
 
 Wraps the four worker methods EngineCore calls in order
 (vllm/v1/engine/core.py, _initialize_kv_caches):

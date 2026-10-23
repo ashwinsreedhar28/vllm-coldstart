@@ -1,4 +1,4 @@
-# vLLM v0.30.0 interface notes (file:line as of tag v0.30.0)
+# vLLM v0.32.0 interface notes (file:line as of tag v0.32.0)
 
 | What | Where |
 |------|-------|

@@ -1,6 +1,6 @@
 # vllm-coldstart design
 
-Status: step 1 done (2026-10-23). vLLM pinned at **v0.30.0**, the `ARG VLLM_VERSION`
+Status: step 1 done (2026-10-23). vLLM pinned at **v0.32.0**, the `ARG VLLM_VERSION`
 in `runpod-workers/worker-vllm/Dockerfile` (`FROM vllm/vllm-openai:${VLLM_VERSION}`).
 
 ## Thesis
@@ -11,7 +11,7 @@ cold start and preemption the engine's problem through three vLLM plugins, each
 measured against Qwen3-8B bf16 on a 4090 with a network volume (PR #351's setup,
 baseline 68-71 s end to end).
 
-## How vLLM v0.30.0 boots (verified in source)
+## How vLLM v0.32.0 boots (verified in source)
 
 `EngineCore._initialize_kv_caches` (vllm/v1/engine/core.py:254) drives the worker
 (vllm/v1/worker/gpu_worker.py) in this order:
@@ -100,3 +100,17 @@ Stop rule: if step 3 does not beat baseline, stop before 4 and 5.
 
 SGLang, TP/PP, quantized checkpoints, implementing speculative warm-up, anything from
 Runpod internal systems.
+
+## 2026-10-23 addenda
+
+- Baseline (step 2) ran on v0.30.0; worker-vllm's base had moved to v0.32.0 by the time
+  the branch was audited. Repinned to v0.32.0. `startup_plan.py` is byte-identical between
+  the two; `Worker.load_model(load_dummy_weights=)`, `GPUModelRunner.reload_weights` and
+  `register_model_loader` are unchanged; 0.32 adds `GPUModelRunner.load_model(model=...)`
+  to hand in a pre-built module, worth a look for capture-before-load.
+- Step 2 findings and numbers: bench/results/README.md.
+- Startup plan: `VllmConfig.compute_hash()` ignores `gpu_memory_utilization`, so a cached
+  plan is applied after the user changes the limit (vllm-project/vllm#60143, draft, fixes
+  the fingerprint). The plan file is written as `<path>.tmp.<pid>` + `os.replace`, which
+  collides across containers sharing a cache root. Default-on in worker-vllm waits for the
+  fingerprint fix; the temp-file race is a separate upstream PR candidate.

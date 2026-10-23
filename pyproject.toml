@@ -5,7 +5,7 @@ description = "Serverless-native cold start and preemption plugins for vLLM"
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
-dependencies = []   # vLLM comes from the worker image (vllm/vllm-openai:v0.30.0); never pinned here
+dependencies = []   # vLLM comes from the worker image (vllm/vllm-openai:v0.32.0); never pinned here
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "safetensors>=0.4", "numpy"]

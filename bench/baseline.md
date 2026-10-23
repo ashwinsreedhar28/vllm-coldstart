@@ -39,12 +39,12 @@ so they stay comparable. `python bench/summarize.py phases.jsonl` prints the tab
 
 Build the image with the `image` GitHub Actions workflow (workflow_dispatch or a `v*` tag); it pushes to GHCR. Locally, from the repo root:
 
-    docker build -f worker/Dockerfile -t ghcr.io/ashwinsreedhar28/vllm-coldstart:bench-v0.30.0 . && docker push ghcr.io/ashwinsreedhar28/vllm-coldstart:bench-v0.30.0
+    docker build -f worker/Dockerfile -t ghcr.io/ashwinsreedhar28/vllm-coldstart:bench-v0.32.0 . && docker push ghcr.io/ashwinsreedhar28/vllm-coldstart:bench-v0.32.0
 
 Then, with the API key in `~/.runpod.env` (`RUNPOD_API_KEY=...`):
 
     python3 bench/run_baseline.py --env-file ~/.runpod.env --list-volumes      # pick the PR #351 volume
-    python3 bench/run_baseline.py --env-file ~/.runpod.env --image ghcr.io/ashwinsreedhar28/vllm-coldstart:bench-v0.30.0 --volume-id <id> --config A --runs 3
+    python3 bench/run_baseline.py --env-file ~/.runpod.env --image ghcr.io/ashwinsreedhar28/vllm-coldstart:bench-v0.32.0 --volume-id <id> --config A --runs 3
     python3 bench/run_baseline.py ... --config B --runs 3
     python3 bench/run_baseline.py ... --config C --runs 3      # run 1 writes the plan, runs 2-3 use it
     python3 bench/summarize.py bench/results/A-*.jsonl

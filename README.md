@@ -1,7 +1,7 @@
 # vllm-coldstart
 
 Serverless-native cold start and preemption plugins for [vLLM](https://github.com/vllm-project/vllm),
-built for Runpod Serverless. Pinned to vLLM v0.30.0, the base of
+built for Runpod Serverless. Pinned to vLLM v0.32.0, the base of
 [worker-vllm](https://github.com/runpod-workers/worker-vllm).
 
 Every production engine assumes a warm, long-lived replica. A Serverless worker is born

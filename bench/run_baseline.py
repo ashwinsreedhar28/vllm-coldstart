@@ -1,7 +1,7 @@
 """Step 2 runner: N cold starts of the vllm-coldstart baseline image on Runpod Serverless.
 
     python3 bench/run_baseline.py --env-file ~/.runpod.env --list-volumes
-    python3 bench/run_baseline.py --env-file ~/.runpod.env --image ghcr.io/ashwinsreedhar28/vllm-coldstart:bench-v0.30.0 \
+    python3 bench/run_baseline.py --env-file ~/.runpod.env --image ghcr.io/ashwinsreedhar28/vllm-coldstart:bench-v0.32.0 \
         --volume-id <id> --config A --runs 3
 
 Per run: scale to 1 worker, send one job, wait, record the phases the handler returns,
