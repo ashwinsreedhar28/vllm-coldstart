@@ -98,7 +98,12 @@ def one_run(key, eid, run_id, out, timeout=900):
     if not set_max_workers(key, eid, 1):
         log(f"run {run_id}: workersMax=1 did not apply"); return False
     t0 = time.time()
-    st, job = call("POST", f"{JOBS}/{eid}/run", key, {"input": {"prompt": "Explain paged attention in one paragraph.", "max_tokens": 32}})
+    for attempt in range(20):  # the jobs API sees the new workersMax a few seconds after REST does
+        t0 = time.time()
+        st, job = call("POST", f"{JOBS}/{eid}/run", key, {"input": {"prompt": "Explain paged attention in one paragraph.", "max_tokens": 32}})
+        if ok(st) or "ENDPOINT_PAUSED" not in str(job):
+            break
+        time.sleep(3)
     if not ok(st):
         log(f"run {run_id}: submit failed {st} {job}"); return False
     jid = job["id"]
