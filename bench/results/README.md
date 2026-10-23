@@ -1,5 +1,23 @@
 # Baseline results (step 2), 2026-10-23
 
+## All configs, median of 3 measured cold starts (seconds)
+
+| config | engine ready | load_model | profile | warm-up + capture | handler import |
+|---|---|---|---|---|---|
+| A default | 63.3 | 31.5 | 6.9 | 7.8 | 19.1 |
+| B runai_streamer | 62.3 | 27.4 (15.6-293) | 7.3 | 7.8 | 18.9 |
+| C `VLLM_ENABLE_STARTUP_PLAN=1` | 54.0 | 25.9 | 2.3 | 7.4 | 18.3 |
+| D `RUNPOD_SKIP_AUTO_SYSTEM_CHECKS=true` | 52.3 | 31.9 | 6.9 | 7.5 | 18.8 |
+| E `safetensors_load_strategy=prefetch` | 51.8 (35.4-97.6) | 20.0 (5.8-22.3) | 6.4 | 6.7 | 9.0 |
+| F `safetensors_load_strategy=eager` | 53.6 (53.3-55.6) | 24.9 (24.3-27.3) | 6.4 | 5.4 | 8.4 |
+
+A-D ran image `bench-d77bef1`; E-F ran `bench-5d3123e` (adds the load-strategy passthrough to the handler).
+D: one `import_vllm` record per run (EngineCore forked, no re-import); A-C, E-F: two (spawned).
+E run 1 recompiled (profile 42.0 s) for an unidentified reason; `LoadConfig.compute_hash()` has no factors, so not the strategy.
+Open: handler import is 8.4-9.5 s on every E/F run and 17-20 s on every A-D run. The images differ by one handler
+line and the pip install time. Needs a controlled rerun of config A on `bench-5d3123e`.
+
+
 Qwen3-8B bf16, vLLM v0.30.0, image `ghcr.io/ashwinsreedhar28/vllm-coldstart:bench-d77bef1`,
 Runpod Serverless, network volume `qin62zym4t` (US-TX-3), GPU filter RTX 4090 class.
 Three measured cold starts per config after one discarded warm-up. Seconds, median of 3.
