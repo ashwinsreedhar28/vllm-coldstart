@@ -18,6 +18,10 @@ Three measured cold starts per config after one discarded warm-up. Seconds, medi
 load_model across all nine runs: 7.0, 15.6, 23.2, 27.3, 27.4, 29.9, 31.5, 32.5, 292.9.
 The spread is the volume, not the loader.
 
+Startup-plan verification (new endpoint `vllm-faxpggoqrljcb9`, same volume, 2 cold starts,
+no warm-up): determine_available_memory 2.26 s and 2.91 s. The plan written by the first
+endpoint's workers was applied by the second endpoint's workers, so it survives a host change.
+
 Findings:
 1. Weight load is volume-bound and highly variable; loader choice is noise against it.
 2. `VLLM_ENABLE_STARTUP_PLAN=1` saves 4.6 s per cold start (profile 6.9 → 2.3 s), every run.
