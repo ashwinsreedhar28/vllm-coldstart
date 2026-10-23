@@ -26,6 +26,10 @@ CONFIGS = {
     # Runpod SDK fitness checks initialize CUDA in the handler process, which forces
     # vLLM to spawn (and re-import in) the EngineCore. Skip them so vLLM can fork.
     "D": {"RUNPOD_SKIP_AUTO_SYSTEM_CHECKS": "true"},
+    # The volume is FUSE, so vLLM skips its NFS auto-prefetch; force the two
+    # network-FS strategies it offers.
+    "E": {"SAFETENSORS_LOAD_STRATEGY": "prefetch"},
+    "F": {"SAFETENSORS_LOAD_STRATEGY": "eager"},
 }
 COMMON_ENV = {
     "MODEL_NAME": "Qwen/Qwen3-8B",

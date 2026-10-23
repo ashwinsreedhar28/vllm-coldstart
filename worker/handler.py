@@ -36,6 +36,7 @@ async def _get_engine():
             load_format=os.environ.get("LOAD_FORMAT", "auto"),
             model_loader_extra_config=json.loads(os.environ.get("LOADER_EXTRA", "{}") or "{}"),
             gpu_memory_utilization=float(os.environ.get("GPU_MEM_UTIL", "0.9")),
+            safetensors_load_strategy=os.environ.get("SAFETENSORS_LOAD_STRATEGY") or None,
         )
         engine = AsyncLLM.from_engine_args(args)
         _log("handler_engine_ready", t, time.time())
