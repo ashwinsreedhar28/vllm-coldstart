@@ -118,27 +118,34 @@ def main():
     ap.add_argument("--warmup", type=int, default=1, help="cold starts to run and discard first (weights download, compile cache fill)")
     ap.add_argument("--disk-gb", type=int, default=40)
     ap.add_argument("--keep", action="store_true", help="leave endpoint/template in place (scaled to 0)")
+    ap.add_argument("--endpoint-id", help="reuse an existing endpoint instead of creating one (implies --keep, --warmup 0)")
     a = ap.parse_args()
     key = load_key(a.env_file)
 
     if a.list_volumes:
         st, v = call("GET", f"{REST}/networkvolumes", key)
         print(json.dumps(v, indent=1)[:3000]); return
-    if not (a.image and a.volume_id):
-        sys.exit("--image and --volume-id required")
+    if not a.endpoint_id and not (a.image and a.volume_id):
+        sys.exit("--image and --volume-id required (or --endpoint-id)")
 
     env = {**COMMON_ENV, **CONFIGS[a.config]}
-    name = f"vllm-coldstart-{a.config}-{int(time.time())}"
-    st, tpl = call("POST", f"{REST}/templates", key, {"name": name, "imageName": a.image, "isServerless": True,
-                                                       "containerDiskInGb": a.disk_gb, "env": env})
-    if not ok(st): sys.exit(f"template {st}: {tpl}")
-    st, ep = call("POST", f"{REST}/endpoints", key, {
-        "templateId": tpl["id"], "name": name, "computeType": "GPU", "gpuTypeIds": GPU_4090, "gpuCount": 1,
-        "workersMin": 0, "workersMax": 0, "idleTimeout": 5, "executionTimeoutMs": 900000, "flashboot": False,
-        "networkVolumeId": a.volume_id})
-    if not ok(st):
-        call("DELETE", f"{REST}/templates/{tpl['id']}", key); sys.exit(f"endpoint {st}: {ep}")
-    eid = ep["id"]
+    if a.endpoint_id:
+        eid, tpl, a.keep, a.warmup = a.endpoint_id, None, True, 0
+        call("PATCH", f"{REST}/endpoints/{eid}", key, {"workersMax": 0})
+        log(f"reusing endpoint {eid}; waiting for it to go cold")
+        wait_cold(key, eid)
+    else:
+        name = f"vllm-coldstart-{a.config}-{int(time.time())}"
+        st, tpl = call("POST", f"{REST}/templates", key, {"name": name, "imageName": a.image, "isServerless": True,
+                                                           "containerDiskInGb": a.disk_gb, "env": env})
+        if not ok(st): sys.exit(f"template {st}: {tpl}")
+        st, ep = call("POST", f"{REST}/endpoints", key, {
+            "templateId": tpl["id"], "name": name, "computeType": "GPU", "gpuTypeIds": GPU_4090, "gpuCount": 1,
+            "workersMin": 0, "workersMax": 0, "idleTimeout": 5, "executionTimeoutMs": 900000, "flashboot": False,
+            "networkVolumeId": a.volume_id})
+        if not ok(st):
+            call("DELETE", f"{REST}/templates/{tpl['id']}", key); sys.exit(f"endpoint {st}: {ep}")
+        eid = ep["id"]
     out = Path(__file__).with_name("results") / f"{a.config}-{int(time.time())}.jsonl"
     # warm-up runs land in <out>.warmup.jsonl so summarize.py never counts them
     out.parent.mkdir(exist_ok=True)
@@ -154,7 +161,7 @@ def main():
                 log("worker did not go away in 10 min; stopping"); break
     finally:
         call("PATCH", f"{REST}/endpoints/{eid}", key, {"workersMax": 0, "workersMin": 0})
-        if not a.keep:
+        if not a.keep and tpl:
             call("DELETE", f"{REST}/endpoints/{eid}", key)
             call("DELETE", f"{REST}/templates/{tpl['id']}", key)
     log("done")
