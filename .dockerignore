@@ -1,0 +1,8 @@
+.git
+.github
+tests
+docs
+bench/results
+__pycache__
+*.pyc
+.runpod.env

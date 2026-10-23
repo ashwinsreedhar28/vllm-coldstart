@@ -1,0 +1,23 @@
+[project]
+name = "vllm_coldstart"
+version = "0.0.1"
+description = "Serverless-native cold start and preemption plugins for vLLM"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+dependencies = []   # vLLM comes from the worker image (vllm/vllm-openai:v0.30.0); never pinned here
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "safetensors>=0.4", "numpy"]
+
+# vLLM general plugin: loaded in every engine/worker process when
+# VLLM_PLUGINS is unset or contains "vllm_coldstart". See vllm-coldstart/plugin.py.
+[project.entry-points."vllm.general_plugins"]
+vllm-coldstart = "vllm_coldstart.plugin:register"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["vllm_coldstart*"]
