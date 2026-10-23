@@ -1,0 +1,89 @@
+{
+ "delayTime": 670,
+ "executionTime": 241,
+ "id": "sync-9e088bd0-7cc5-4bad-9a82-33a5cd212985-u1",
+ "output": {
+  "phases": [
+   {
+    "end": 1792772965.0618114,
+    "phase": "handler_import",
+    "pid": 57,
+    "secs": 16.789,
+    "start": 1792772948.2728417
+   },
+   {
+    "end": 1792772968.6802263,
+    "phase": "import_vllm",
+    "pid": 57,
+    "rank": "0",
+    "secs": 20.47,
+    "start": 1792772948.2102244
+   },
+   {
+    "end": 1792772982.3605375,
+    "phase": "import_vllm",
+    "pid": 423,
+    "rank": "0",
+    "secs": 10.5,
+    "start": 1792772971.860536
+   },
+   {
+    "end": 1792773077.0323944,
+    "phase": "load_model",
+    "pid": 423,
+    "rank": "0",
+    "secs": 94.132,
+    "start": 1792772982.9005754
+   },
+   {
+    "end": 1792773118.986712,
+    "phase": "determine_available_memory",
+    "pid": 423,
+    "rank": "0",
+    "secs": 41.95,
+    "start": 1792773077.0368102
+   },
+   {
+    "end": 1792773118.9941936,
+    "phase": "initialize_from_config",
+    "pid": 423,
+    "rank": "0",
+    "secs": 0.003,
+    "start": 1792773118.9913027
+   },
+   {
+    "end": 1792773129.7951314,
+    "phase": "compile_or_warm_up_model",
+    "pid": 423,
+    "rank": "0",
+    "secs": 10.798,
+    "start": 1792773118.9972172
+   },
+   {
+    "end": 1792773130.6505435,
+    "phase": "handler_engine_ready",
+    "pid": 57,
+    "secs": 164.375,
+    "start": 1792772966.2751048
+   },
+   {
+    "end": 1792773130.7323403,
+    "phase": "handler_first_token",
+    "pid": 57,
+    "secs": 0.078,
+    "start": 1792773130.6542356
+   },
+   {
+    "end": 1792773486.2183068,
+    "phase": "handler_first_token",
+    "pid": 57,
+    "secs": 0.032,
+    "start": 1792773486.1862607
+   }
+  ],
+  "text": ", i need to",
+  "ttft_s": 0.032
+ },
+ "status": "COMPLETED",
+ "workerId": "1mdelo6mc3hcz0"
+}
