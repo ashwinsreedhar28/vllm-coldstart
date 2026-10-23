@@ -11,11 +11,21 @@
 | E `safetensors_load_strategy=prefetch` | 51.8 (35.4-97.6) | 20.0 (5.8-22.3) | 6.4 | 6.7 | 9.0 |
 | F `safetensors_load_strategy=eager` | 53.6 (53.3-55.6) | 24.9 (24.3-27.3) | 6.4 | 5.4 | 8.4 |
 
-A-D ran image `bench-d77bef1`; E-F ran `bench-5d3123e` (adds the load-strategy passthrough to the handler).
-D: one `import_vllm` record per run (EngineCore forked, no re-import); A-C, E-F: two (spawned).
-E run 1 recompiled (profile 42.0 s) for an unidentified reason; `LoadConfig.compute_hash()` has no factors, so not the strategy.
-Open: handler import is 8.4-9.5 s on every E/F run and 17-20 s on every A-D run. The images differ by one handler
-line and the pip install time. Needs a controlled rerun of config A on `bench-5d3123e`.
+A-D ran image `bench-d77bef1` on **vLLM v0.30.0**; E, F and the second A below ran `bench-5d3123e` on
+**vLLM v0.32.0** (the repin commit changed `worker/Dockerfile`'s base tag). So E/F are not comparable to
+A-D directly; compare them with A on the same image:
+
+| config (vLLM v0.32.0, `bench-5d3123e`) | engine ready | load_model (3 runs) | profile | capture | handler import |
+|---|---|---|---|---|---|
+| A default | 44.6 (37.3-57.6) | 8.4, 7.9, 27.6 | 6.5 | 6.0 | 10.0 |
+| E prefetch | 51.8 (35.4-97.6) | 22.3, 5.8, 20.0 | 6.4 | 6.7 | 9.0 |
+| F eager | 53.6 (53.3-55.6) | 24.3, 24.9, 27.3 | 6.4 | 5.4 | 8.4 |
+
+What the version change bought by itself: handler import 17-20 s on v0.30.0 → 8.4-11.5 s on v0.32.0 on
+every run (9 runs each); warm-up + capture 7.2-8.6 → 5.2-7.1. E run 1's 42 s profile was the first
+boot on v0.32.0 filling a new compile-cache key, not the load strategy (`LoadConfig.compute_hash()` has
+no factors). D: one `import_vllm` record per run (EngineCore forked, no re-import); every other config: two.
+load_model under 10 s means the host still had the weights in page cache from a previous worker.
 
 
 Qwen3-8B bf16, vLLM v0.30.0, image `ghcr.io/ashwinsreedhar28/vllm-coldstart:bench-d77bef1`,
