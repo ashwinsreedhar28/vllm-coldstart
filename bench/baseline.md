@@ -31,7 +31,7 @@ Phases recorded (worker process):
 Plus, from the handler (worker/handler.py): container start → handler import → engine
 ready → first token on a 32-token prompt, written as `handler_*` lines.
 
-Procedure per run: scale endpoint to 0 workers, wait 5 min, send one request, collect
+Run 0 (warm-up, discarded) downloads the weights and fills the compile cache. Procedure per measured run: scale endpoint to 0 workers, wait 5 min, send one request, collect
 `phases.jsonl`, append the run id. Delete the startup-plan dir between config A/B runs
 so they stay comparable. `python bench/summarize.py phases.jsonl` prints the table.
 

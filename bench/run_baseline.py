@@ -115,6 +115,7 @@ def main():
     ap.add_argument("--volume-id")
     ap.add_argument("--config", choices=CONFIGS, default="A")
     ap.add_argument("--runs", type=int, default=3)
+    ap.add_argument("--warmup", type=int, default=1, help="cold starts to run and discard first (weights download, compile cache fill)")
     ap.add_argument("--disk-gb", type=int, default=40)
     ap.add_argument("--keep", action="store_true", help="leave endpoint/template in place (scaled to 0)")
     a = ap.parse_args()
@@ -139,11 +140,13 @@ def main():
         call("DELETE", f"{REST}/templates/{tpl['id']}", key); sys.exit(f"endpoint {st}: {ep}")
     eid = ep["id"]
     out = Path(__file__).with_name("results") / f"{a.config}-{int(time.time())}.jsonl"
+    # warm-up runs land in <out>.warmup.jsonl so summarize.py never counts them
     out.parent.mkdir(exist_ok=True)
     log(f"endpoint {eid} config {a.config} env {CONFIGS[a.config] or '{}'} -> {out}")
     try:
-        for i in range(1, a.runs + 1):
-            if not one_run(key, eid, i, out):
+        for i in range(-a.warmup + 1, a.runs + 1):
+            label = i if i >= 1 else f"warmup{i}"
+            if not one_run(key, eid, label, out if i >= 1 else out.with_suffix(".warmup.jsonl")):
                 break
             call("PATCH", f"{REST}/endpoints/{eid}", key, {"workersMax": 0})
             log("scaling to 0, waiting for cold")
