@@ -55,7 +55,16 @@ async def handler(job):
             first = time.time()
             _log("handler_first_token", t, first)
         text = out.outputs[0].text
-    return {"text": text, "ttft_s": round(first - t, 3) if first else None, "phases": _phases_this_boot()}
+    return {"text": text, "ttft_s": round(first - t, 3) if first else None, "phases": _phases_this_boot(),
+            "gpu": _gpu_name(), "worker_id": os.environ.get("RUNPOD_POD_ID")}
+
+
+def _gpu_name():
+    try:
+        import torch
+        return torch.cuda.get_device_name(0)
+    except Exception:  # noqa: BLE001
+        return None
 
 
 def _phases_this_boot():

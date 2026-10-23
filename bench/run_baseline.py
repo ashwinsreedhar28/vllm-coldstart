@@ -99,10 +99,10 @@ def one_run(key, eid, run_id, out, timeout=900):
         return False
     o = s.get("output") or {}
     rec = {"run": run_id, "wall_s": round(time.time() - t0, 1), "delay_s": round((s.get("delayTime") or 0) / 1000, 1),
-           "exec_s": round((s.get("executionTime") or 0) / 1000, 1), "ttft_s": o.get("ttft_s"), "phases": o.get("phases", [])}
+           "exec_s": round((s.get("executionTime") or 0) / 1000, 1), "ttft_s": o.get("ttft_s"), "gpu": o.get("gpu"), "worker_id": o.get("worker_id"), "phases": o.get("phases", [])}
     with open(out, "a") as f:
         f.write(json.dumps(rec) + "\n")
-    log(f"run {run_id}: wall {rec['wall_s']}s delay {rec['delay_s']}s exec {rec['exec_s']}s ttft {rec['ttft_s']}s; "
+    log(f"run {run_id} [{rec['gpu']}]: wall {rec['wall_s']}s delay {rec['delay_s']}s exec {rec['exec_s']}s ttft {rec['ttft_s']}s; "
         + ", ".join(f"{p['phase']}={p['secs']}" for p in rec["phases"] if p.get("secs")))
     return True
 
