@@ -20,7 +20,8 @@ from vllm import SamplingParams  # noqa: E402
 from vllm.engine.arg_utils import AsyncEngineArgs  # noqa: E402
 from vllm.v1.engine.async_llm import AsyncLLM  # noqa: E402
 
-_log("handler_import", T_START, time.time())
+if __name__ == "__main__":
+    _log("handler_import", T_START, time.time())
 
 engine = None
 
@@ -67,4 +68,9 @@ def _phases_this_boot():
     return [r for r in recs if r.get("start", 0) >= T_START - 1 and r["phase"] != "process_start"]
 
 
-runpod.serverless.start({"handler": handler})
+if __name__ == "__main__":
+    # vLLM forces the `spawn` start method here (Runpod's fitness checks initialize
+    # CUDA in this process), and spawn re-imports this module in the EngineCore
+    # child. Without this guard the child starts a second Serverless worker and
+    # the container dies ~25 s after "Started." (seen on the first baseline run).
+    runpod.serverless.start({"handler": handler})

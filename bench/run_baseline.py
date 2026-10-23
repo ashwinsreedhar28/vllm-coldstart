@@ -111,7 +111,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--env-file")
     ap.add_argument("--list-volumes", action="store_true")
-    ap.add_argument("--image")
+    ap.add_argument("--image", help="full image ref; prefer the bench-<sha> tag so a stale pull cache cannot serve an old build")
     ap.add_argument("--volume-id")
     ap.add_argument("--config", choices=CONFIGS, default="A")
     ap.add_argument("--runs", type=int, default=3)
