@@ -71,17 +71,32 @@ def workers(key, eid):
     return {k: v for k, v in ((h or {}).get("workers") or {}).items() if v} if ok(st) and isinstance(h, dict) else {}
 
 
-def wait_cold(key, eid, timeout=600):
-    t = time.time()
+def wait_cold(key, eid, timeout=600, settle=3):
+    """True once health reports no workers for `settle` consecutive polls (10 s apart)."""
+    t, quiet = time.time(), 0
     while time.time() - t < timeout:
-        if not workers(key, eid):
+        quiet = quiet + 1 if not workers(key, eid) else 0
+        if quiet >= settle:
             return True
         time.sleep(10)
     return False
 
 
+def set_max_workers(key, eid, n, timeout=60):
+    """PATCH workersMax and poll until the endpoint reports it (the API is eventually consistent)."""
+    call("PATCH", f"{REST}/endpoints/{eid}", key, {"workersMax": n})
+    t = time.time()
+    while time.time() - t < timeout:
+        st, e = call("GET", f"{REST}/endpoints/{eid}", key)
+        if ok(st) and isinstance(e, dict) and e.get("workersMax") == n:
+            return True
+        time.sleep(3)
+    return False
+
+
 def one_run(key, eid, run_id, out, timeout=900):
-    call("PATCH", f"{REST}/endpoints/{eid}", key, {"workersMax": 1})
+    if not set_max_workers(key, eid, 1):
+        log(f"run {run_id}: workersMax=1 did not apply"); return False
     t0 = time.time()
     st, job = call("POST", f"{JOBS}/{eid}/run", key, {"input": {"prompt": "Explain paged attention in one paragraph.", "max_tokens": 32}})
     if not ok(st):
@@ -131,7 +146,7 @@ def main():
     env = {**COMMON_ENV, **CONFIGS[a.config]}
     if a.endpoint_id:
         eid, tpl, a.keep, a.warmup = a.endpoint_id, None, True, 0
-        call("PATCH", f"{REST}/endpoints/{eid}", key, {"workersMax": 0})
+        set_max_workers(key, eid, 0)
         log(f"reusing endpoint {eid}; waiting for it to go cold")
         wait_cold(key, eid)
     else:
@@ -155,7 +170,7 @@ def main():
             label = i if i >= 1 else f"warmup{i}"
             if not one_run(key, eid, label, out if i >= 1 else out.with_suffix(".warmup.jsonl")):
                 break
-            call("PATCH", f"{REST}/endpoints/{eid}", key, {"workersMax": 0})
+            set_max_workers(key, eid, 0)
             log("scaling to 0, waiting for cold")
             if not wait_cold(key, eid):
                 log("worker did not go away in 10 min; stopping"); break
