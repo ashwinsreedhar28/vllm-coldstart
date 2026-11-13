@@ -1,0 +1,320 @@
+{
+ "arm": "two-fs",
+ "eid": "tjqv4269bpmsow",
+ "tpl": "0kq3oifpef",
+ "session": "two-fs-t",
+ "plan": [
+  {
+   "turn": 0,
+   "gap": null,
+   "sess": 0,
+   "sturn": 0
+  },
+  {
+   "turn": 1,
+   "gap": 12.0,
+   "sess": 1,
+   "sturn": 0
+  },
+  {
+   "turn": 2,
+   "gap": 12.0,
+   "sess": 0,
+   "sturn": 1
+  },
+  {
+   "turn": 3,
+   "gap": 8.0,
+   "sess": 1,
+   "sturn": 1
+  },
+  {
+   "turn": 4,
+   "gap": 8.0,
+   "sess": 0,
+   "sturn": 2
+  },
+  {
+   "turn": 5,
+   "gap": 8.0,
+   "sess": 1,
+   "sturn": 2
+  },
+  {
+   "turn": 6,
+   "gap": 40.0,
+   "sess": 0,
+   "sturn": 3
+  },
+  {
+   "turn": 7,
+   "gap": 8.0,
+   "sess": 1,
+   "sturn": 3
+  },
+  {
+   "turn": 8,
+   "gap": 12.0,
+   "sess": 0,
+   "sturn": 4
+  },
+  {
+   "turn": 9,
+   "gap": 12.0,
+   "sess": 1,
+   "sturn": 4
+  },
+  {
+   "turn": 10,
+   "gap": 8.0,
+   "sess": 0,
+   "sturn": 5
+  },
+  {
+   "turn": 11,
+   "gap": 8.0,
+   "sess": 1,
+   "sturn": 5
+  },
+  {
+   "turn": 12,
+   "gap": 20.0,
+   "sess": 0,
+   "sturn": 6
+  },
+  {
+   "turn": 13,
+   "gap": 12.0,
+   "sess": 1,
+   "sturn": 6
+  },
+  {
+   "turn": 14,
+   "gap": 12.0,
+   "sess": 0,
+   "sturn": 7
+  },
+  {
+   "turn": 15,
+   "gap": 12.0,
+   "sess": 1,
+   "sturn": 7
+  },
+  {
+   "turn": 16,
+   "gap": 20.0,
+   "sess": 0,
+   "sturn": 8
+  },
+  {
+   "turn": 17,
+   "gap": 12.0,
+   "sess": 1,
+   "sturn": 8
+  },
+  {
+   "turn": 18,
+   "gap": 20.0,
+   "sess": 0,
+   "sturn": 9
+  },
+  {
+   "turn": 19,
+   "gap": 12.0,
+   "sess": 1,
+   "sturn": 9
+  },
+  {
+   "turn": 20,
+   "gap": 20.0,
+   "sess": 0,
+   "sturn": 10
+  },
+  {
+   "turn": 21,
+   "gap": 20.0,
+   "sess": 1,
+   "sturn": 10
+  },
+  {
+   "turn": 22,
+   "gap": 8.0,
+   "sess": 0,
+   "sturn": 11
+  },
+  {
+   "turn": 23,
+   "gap": 40.0,
+   "sess": 1,
+   "sturn": 11
+  },
+  {
+   "turn": 24,
+   "gap": 40.0,
+   "sess": 0,
+   "sturn": 12
+  },
+  {
+   "turn": 25,
+   "gap": 12.0,
+   "sess": 1,
+   "sturn": 12
+  },
+  {
+   "turn": 26,
+   "gap": 20.0,
+   "sess": 0,
+   "sturn": 13
+  },
+  {
+   "turn": 27,
+   "gap": 40.0,
+   "sess": 1,
+   "sturn": 13
+  },
+  {
+   "turn": 28,
+   "gap": 40.0,
+   "sess": 0,
+   "sturn": 14
+  },
+  {
+   "turn": 29,
+   "gap": 20.0,
+   "sess": 1,
+   "sturn": 14
+  },
+  {
+   "turn": 30,
+   "gap": 8.0,
+   "sess": 0,
+   "sturn": 15
+  },
+  {
+   "turn": 31,
+   "gap": 12.0,
+   "sess": 1,
+   "sturn": 15
+  },
+  {
+   "turn": 32,
+   "gap": 20.0,
+   "sess": 0,
+   "sturn": 16
+  },
+  {
+   "turn": 33,
+   "gap": 8.0,
+   "sess": 1,
+   "sturn": 16
+  },
+  {
+   "turn": 34,
+   "gap": 40.0,
+   "sess": 0,
+   "sturn": 17
+  },
+  {
+   "turn": 35,
+   "gap": 20.0,
+   "sess": 1,
+   "sturn": 17
+  },
+  {
+   "turn": 36,
+   "gap": 8.0,
+   "sess": 0,
+   "sturn": 18
+  },
+  {
+   "turn": 37,
+   "gap": 20.0,
+   "sess": 1,
+   "sturn": 18
+  },
+  {
+   "turn": 38,
+   "gap": 12.0,
+   "sess": 0,
+   "sturn": 19
+  },
+  {
+   "turn": 39,
+   "gap": 8.0,
+   "sess": 1,
+   "sturn": 19
+  },
+  {
+   "turn": 40,
+   "gap": 20.0,
+   "sess": 0,
+   "sturn": 20
+  },
+  {
+   "turn": 41,
+   "gap": 20.0,
+   "sess": 1,
+   "sturn": 20
+  },
+  {
+   "turn": 42,
+   "gap": 8.0,
+   "sess": 0,
+   "sturn": 21
+  },
+  {
+   "turn": 43,
+   "gap": 8.0,
+   "sess": 1,
+   "sturn": 21
+  },
+  {
+   "turn": 44,
+   "gap": 12.0,
+   "sess": 0,
+   "sturn": 22
+  },
+  {
+   "turn": 45,
+   "gap": 40.0,
+   "sess": 1,
+   "sturn": 22
+  },
+  {
+   "turn": 46,
+   "gap": 12.0,
+   "sess": 0,
+   "sturn": 23
+  },
+  {
+   "turn": 47,
+   "gap": 8.0,
+   "sess": 1,
+   "sturn": 23
+  }
+ ],
+ "i": 48,
+ "job": null,
+ "last_done": 1794589917.2879794,
+ "sessions": 2,
+ "base_items": 800,
+ "turn_items": 30,
+ "max_workers": 1,
+ "endpoint": {
+  "idleTimeout": 5,
+  "flashboot": true,
+  "gpuTypeIds": [
+   "NVIDIA GeForce RTX 4090"
+  ],
+  "networkVolumeId": "ja56pxcrgv",
+  "workersMax": 3
+ },
+ "template_echo": {
+  "dockerEntrypoint": [
+   "bash",
+   "-c"
+  ],
+  "imageName": "vllm/vllm-openai:v0.32.0",
+  "start_cmd_len": 5778
+ }
+}

@@ -1,0 +1,227 @@
+{
+ "arm": "rate-a",
+ "eid": "uz4w1oyb21pr4m",
+ "tpl": "0ysvzs7z3m",
+ "session": "rate-a-a",
+ "plan": [
+  {
+   "turn": 0,
+   "gap": null
+  },
+  {
+   "turn": 1,
+   "gap": 8.0
+  },
+  {
+   "turn": 2,
+   "gap": 90.0
+  },
+  {
+   "turn": 3,
+   "gap": 90.0
+  },
+  {
+   "turn": 4,
+   "gap": 12.0
+  },
+  {
+   "turn": 5,
+   "gap": 12.0
+  },
+  {
+   "turn": 6,
+   "gap": 40.0
+  },
+  {
+   "turn": 7,
+   "gap": 12.0
+  },
+  {
+   "turn": 8,
+   "gap": 12.0
+  },
+  {
+   "turn": 9,
+   "gap": 8.0
+  },
+  {
+   "turn": 10,
+   "gap": 20.0
+  },
+  {
+   "turn": 11,
+   "gap": 40.0
+  },
+  {
+   "turn": 12,
+   "gap": 12.0
+  },
+  {
+   "turn": 13,
+   "gap": 8.0
+  },
+  {
+   "turn": 14,
+   "gap": 8.0
+  },
+  {
+   "turn": 15,
+   "gap": 20.0
+  },
+  {
+   "turn": 16,
+   "gap": 40.0
+  },
+  {
+   "turn": 17,
+   "gap": 12.0
+  },
+  {
+   "turn": 18,
+   "gap": 8.0
+  },
+  {
+   "turn": 19,
+   "gap": 12.0
+  },
+  {
+   "turn": 20,
+   "gap": 90.0
+  },
+  {
+   "turn": 21,
+   "gap": 12.0
+  },
+  {
+   "turn": 22,
+   "gap": 12.0
+  },
+  {
+   "turn": 23,
+   "gap": 12.0
+  },
+  {
+   "turn": 24,
+   "gap": 12.0
+  },
+  {
+   "turn": 25,
+   "gap": 40.0
+  },
+  {
+   "turn": 26,
+   "gap": 8.0
+  },
+  {
+   "turn": 27,
+   "gap": 20.0
+  },
+  {
+   "turn": 28,
+   "gap": 40.0
+  },
+  {
+   "turn": 29,
+   "gap": 20.0
+  },
+  {
+   "turn": 30,
+   "gap": 90.0
+  },
+  {
+   "turn": 31,
+   "gap": 8.0
+  },
+  {
+   "turn": 32,
+   "gap": 8.0
+  },
+  {
+   "turn": 33,
+   "gap": 90.0
+  },
+  {
+   "turn": 34,
+   "gap": 8.0
+  },
+  {
+   "turn": 35,
+   "gap": 20.0
+  },
+  {
+   "turn": 36,
+   "gap": 20.0
+  },
+  {
+   "turn": 37,
+   "gap": 20.0
+  },
+  {
+   "turn": 38,
+   "gap": 8.0
+  },
+  {
+   "turn": 39,
+   "gap": 40.0
+  },
+  {
+   "turn": 40,
+   "gap": 20.0
+  },
+  {
+   "turn": 41,
+   "gap": 20.0
+  },
+  {
+   "turn": 42,
+   "gap": 12.0
+  },
+  {
+   "turn": 43,
+   "gap": 8.0
+  },
+  {
+   "turn": 44,
+   "gap": 40.0
+  },
+  {
+   "turn": 45,
+   "gap": 90.0
+  },
+  {
+   "turn": 46,
+   "gap": 20.0
+  },
+  {
+   "turn": 47,
+   "gap": 8.0
+  },
+  {
+   "turn": 48,
+   "gap": 40.0
+  }
+ ],
+ "i": 49,
+ "job": null,
+ "last_done": 1794586177.3195686,
+ "base_items": 800,
+ "turn_items": 30,
+ "max_workers": 1,
+ "endpoint": {
+  "idleTimeout": 5,
+  "flashboot": true,
+  "gpuTypeIds": [
+   "NVIDIA GeForce RTX 4090"
+  ],
+  "networkVolumeId": "ja56pxcrgv",
+  "workersMax": 3
+ },
+ "template_echo": {
+  "dockerEntrypoint": [
+   "bash",
+   "-c"
+  ],
+  "imageName": "vllm/vllm-openai:v0.32.0",
+  "start_cmd_len": 5778
+ }
+}
