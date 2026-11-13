@@ -20,9 +20,10 @@ readall() {  # $1 dir $2 tag: time a cold-as-possible read of every block file
   t0=$(date +%s.%N); find $1 -type f -print0 | xargs -0 -P 16 -n 64 cat > /dev/null; t1=$(date +%s.%N)
   echo "$2 readall seconds=$(awk "BEGIN{print $t1 - $t0}") bytes=$(du -sb $1 | cut -f1)" >> /w/out/disk.txt
 }
-start() {  # $1 model $2 kv root $3 log name $4 max model len
+start() {  # $1 model $2 kv root $3 log name $4 max model len $5 offload block size in tokens (optional)
   mkdir -p $2
-  CFG="{\"kv_connector\":\"OffloadingConnector\",\"kv_role\":\"kv_both\",\"kv_connector_extra_config\":{\"spec_name\":\"TieringOffloadingSpec\",\"cpu_bytes_to_use\":12884901888,\"secondary_tiers\":[{\"type\":\"fs\",\"root_dir\":\"$2\"}]}}"
+  BS=""; [ -n "$5" ] && BS="\"block_size\":$5,"
+  CFG="{\"kv_connector\":\"OffloadingConnector\",\"kv_role\":\"kv_both\",\"kv_connector_extra_config\":{\"spec_name\":\"TieringOffloadingSpec\",\"cpu_bytes_to_use\":12884901888,$BS\"secondary_tiers\":[{\"type\":\"fs\",\"root_dir\":\"$2\"}]}}"
   t0=$(date +%s)
   setsid vllm serve $1 --host 127.0.0.1 --port 8001 --max-model-len $4 --served-model-name $1 --gpu-memory-utilization 0.90 \
     --max-num-seqs 8 --trust-remote-code --enable-prompt-tokens-details --kv-transfer-config "$CFG" > /w/out/$3 2>&1 &
@@ -40,15 +41,21 @@ stop() {
   kill -KILL -- -$(cat /w/vllm.pid) 2>/dev/null; sleep 8
   rm -f /dev/shm/vllm_offload_*  # a killed server leaves its 12 GB CPU-tier region behind
 }
-pair() {  # $1 model $2 root $3 tag $4 first plan $5 second plan $6 max model len: write, restart, restore
-  start $1 $2 vllm_$3_s1.log $6 && { $B --model $1 --label $3-s1 --plan $4; kvsize $2 $3-after-s1; sleep 60; kvsize $2 $3-after-s1-60s; }
+pair() {  # $1 model $2 root $3 tag $4 first plan $5 second plan $6 max model len $7 block size: write, restart, restore
+  start $1 $2 vllm_$3_s1.log $6 $7 && { $B --model $1 --label $3-s1 --plan $4; kvsize $2 $3-after-s1; sleep 60; kvsize $2 $3-after-s1-60s; }
   stop; kvsize $2 $3-after-stop; readall $2 $3
-  start $1 $2 vllm_$3_s2.log $6 && $B --model $1 --label $3-s2 --plan $5
+  start $1 $2 vllm_$3_s2.log $6 $7 && $B --model $1 --label $3-s2 --plan $5
   stop; kvsize $2 $3-after-s2
   echo "pair $3 done $(date -u)"
 }
 
-if [ "$MODE" != restore ]; then
+if [ "$MODE" = blocks ]; then  # needs a 48 GB GPU: 8B with 30k and 40k contexts (the model limit is 40,960), default 16-token blocks vs 512
+  rm -rf /workspace/kv /workspace/kv_b16 /workspace/kv_b512; disk /workspace net
+  pair Qwen/Qwen3-8B /workspace/kv_b512 q8-b512 warm,A30,B40 warm,A30,B40,E30,F40 40960 512
+  rm -rf /workspace/kv_b512
+  pair Qwen/Qwen3-8B /workspace/kv_b16 q8-b16 warm,A30,B40 warm,A30,B40,E30,F40 40960
+  rm -rf /workspace/kv_b16
+elif [ "$MODE" != restore ]; then
   disk /w local; disk /workspace net
   [ "$MODE" = full ] && pair Qwen/Qwen3-8B /w/kv_local q8-local warm,A8,A8,A30,A30 warm,A30,A30,A8,C30,X:A30 32000
   pair Qwen/Qwen3-8B /workspace/kv q8-net warm,A8,A8,A30,A30 warm,A30,A30,A8,C30,X:A30 32000

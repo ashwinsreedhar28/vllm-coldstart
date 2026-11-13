@@ -13,7 +13,7 @@ sys.path.insert(0, str(Path(os.environ.get("SHWIN_HARNESS", HERE.parents[2] / "s
 import pod_sweep as ps  # noqa: E402
 
 ap = argparse.ArgumentParser()
-ap.add_argument("--mode", choices=["full", "net", "restore"], required=True)
+ap.add_argument("--mode", choices=["full", "net", "restore", "blocks"], required=True)
 ap.add_argument("--volume-id", required=True)
 ap.add_argument("--out", type=Path, required=True)
 ap.add_argument("--gpu", action="append", default=[])
