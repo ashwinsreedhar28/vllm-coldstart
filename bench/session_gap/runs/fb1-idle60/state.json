@@ -1,0 +1,59 @@
+{
+ "arm": "fb1-idle60",
+ "eid": "djwpnsczpq9nfg",
+ "tpl": "rkpmy6jcta",
+ "session": "fb1-idle60-s1",
+ "plan": [
+  {
+   "turn": 0,
+   "gap": null
+  },
+  {
+   "turn": 1,
+   "gap": 0.0
+  },
+  {
+   "turn": 2,
+   "gap": 10.0
+  },
+  {
+   "turn": 3,
+   "gap": 60.0
+  },
+  {
+   "turn": 4,
+   "gap": 300.0
+  },
+  {
+   "turn": 5,
+   "gap": 60.0
+  },
+  {
+   "turn": 6,
+   "gap": 10.0
+  }
+ ],
+ "i": 7,
+ "job": null,
+ "last_done": 1794544145.8779335,
+ "base_items": 1500,
+ "turn_items": 40,
+ "max_workers": 1,
+ "endpoint": {
+  "idleTimeout": 60,
+  "flashboot": true,
+  "gpuTypeIds": [
+   "NVIDIA GeForce RTX 4090"
+  ],
+  "networkVolumeId": "ja56pxcrgv",
+  "workersMax": 3
+ },
+ "template_echo": {
+  "dockerEntrypoint": [
+   "bash",
+   "-c"
+  ],
+  "imageName": "vllm/vllm-openai:v0.32.0",
+  "start_cmd_len": 5778
+ }
+}

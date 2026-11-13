@@ -1,0 +1,55 @@
+{
+ "arm": "smoke",
+ "eid": "c0li8x5kd6dqby",
+ "tpl": "rqcwetu2bi",
+ "session": "smoke-s1",
+ "plan": [
+  {
+   "turn": -1,
+   "gap": null,
+   "probe": true
+  },
+  {
+   "turn": 0,
+   "gap": null
+  },
+  {
+   "turn": 1,
+   "gap": 0.0
+  }
+ ],
+ "i": 0,
+ "job": {
+  "id": "6ee90abb-4ef1-42a1-bd78-aed6328fd7c6-u2",
+  "t_submit": 1794540531.2292364,
+  "health_at_submit": {
+   "idle": 0,
+   "initializing": 1,
+   "ready": 0,
+   "running": 0,
+   "throttled": 0,
+   "unhealthy": 0
+  }
+ },
+ "last_done": null,
+ "base_items": 1500,
+ "turn_items": 40,
+ "max_workers": 1,
+ "endpoint": {
+  "idleTimeout": 5,
+  "flashboot": true,
+  "gpuTypeIds": [
+   "NVIDIA GeForce RTX 4090"
+  ],
+  "networkVolumeId": "ja56pxcrgv",
+  "workersMax": 3
+ },
+ "template_echo": {
+  "dockerEntrypoint": [
+   "bash",
+   "-c"
+  ],
+  "imageName": "ghcr.io/ashwinsreedhar28/vllm-coldstart:bench-5d3123e",
+  "start_cmd_len": 4907
+ }
+}

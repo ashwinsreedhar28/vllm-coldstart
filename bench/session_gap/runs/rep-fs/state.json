@@ -1,0 +1,131 @@
+{
+ "arm": "rep-fs",
+ "eid": "5l09fc9tt4j222",
+ "tpl": "zniu6ooteh",
+ "session": "rep-fs-r1",
+ "plan": [
+  {
+   "turn": 0,
+   "gap": null
+  },
+  {
+   "turn": 1,
+   "gap": 10.0
+  },
+  {
+   "turn": 2,
+   "gap": 60.0
+  },
+  {
+   "turn": 3,
+   "gap": 7.0
+  },
+  {
+   "turn": 4,
+   "gap": 30.0
+  },
+  {
+   "turn": 5,
+   "gap": 120.0
+  },
+  {
+   "turn": 6,
+   "gap": 15.0
+  },
+  {
+   "turn": 7,
+   "gap": 30.0
+  },
+  {
+   "turn": 8,
+   "gap": 7.0
+  },
+  {
+   "turn": 9,
+   "gap": 120.0
+  },
+  {
+   "turn": 10,
+   "gap": 10.0
+  },
+  {
+   "turn": 11,
+   "gap": 15.0
+  },
+  {
+   "turn": 12,
+   "gap": 60.0
+  },
+  {
+   "turn": 13,
+   "gap": 60.0
+  },
+  {
+   "turn": 14,
+   "gap": 15.0
+  },
+  {
+   "turn": 15,
+   "gap": 10.0
+  },
+  {
+   "turn": 16,
+   "gap": 120.0
+  },
+  {
+   "turn": 17,
+   "gap": 7.0
+  },
+  {
+   "turn": 18,
+   "gap": 30.0
+  },
+  {
+   "turn": 19,
+   "gap": 15.0
+  },
+  {
+   "turn": 20,
+   "gap": 120.0
+  },
+  {
+   "turn": 21,
+   "gap": 30.0
+  },
+  {
+   "turn": 22,
+   "gap": 60.0
+  },
+  {
+   "turn": 23,
+   "gap": 7.0
+  },
+  {
+   "turn": 24,
+   "gap": 10.0
+  }
+ ],
+ "i": 25,
+ "job": null,
+ "last_done": 1794545502.1480517,
+ "base_items": 1500,
+ "turn_items": 40,
+ "max_workers": 1,
+ "endpoint": {
+  "idleTimeout": 5,
+  "flashboot": true,
+  "gpuTypeIds": [
+   "NVIDIA GeForce RTX 4090"
+  ],
+  "networkVolumeId": "ja56pxcrgv",
+  "workersMax": 3
+ },
+ "template_echo": {
+  "dockerEntrypoint": [
+   "bash",
+   "-c"
+  ],
+  "imageName": "vllm/vllm-openai:v0.32.0",
+  "start_cmd_len": 5778
+ }
+}
