@@ -293,20 +293,9 @@
    "sturn": 23
   }
  ],
- "i": 0,
- "job": {
-  "id": "d682d4e5-c7ec-4be9-894d-4ca44537f7a0-u2",
-  "t_submit": 1794589931.639991,
-  "health_at_submit": {
-   "idle": 0,
-   "initializing": 0,
-   "ready": 0,
-   "running": 0,
-   "throttled": 0,
-   "unhealthy": 0
-  }
- },
- "last_done": null,
+ "i": 48,
+ "job": null,
+ "last_done": 1794591265.3891602,
  "sessions": 2,
  "base_items": 800,
  "turn_items": 30,

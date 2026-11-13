@@ -1,0 +1,51 @@
+{
+ "arm": "h9-smoke2",
+ "eid": "oeozx5bq7qiizk",
+ "tpl": "s0w1pq9odl",
+ "session": "h9-smoke2-h",
+ "plan": [
+  {
+   "turn": 0,
+   "gap": null,
+   "sess": 0,
+   "sturn": 0
+  },
+  {
+   "turn": 1,
+   "gap": 0.0,
+   "sess": 0,
+   "sturn": 1
+  },
+  {
+   "turn": 2,
+   "gap": 8.0,
+   "sess": 0,
+   "sturn": 2
+  }
+ ],
+ "i": 1,
+ "job": null,
+ "last_done": 1794591693.0927374,
+ "sessions": 1,
+ "clean_kv": 0,
+ "base_items": 800,
+ "turn_items": 30,
+ "max_workers": 1,
+ "endpoint": {
+  "idleTimeout": 5,
+  "flashboot": true,
+  "gpuTypeIds": [
+   "NVIDIA GeForce RTX 4090"
+  ],
+  "networkVolumeId": "ja56pxcrgv",
+  "workersMax": 3
+ },
+ "template_echo": {
+  "dockerEntrypoint": [
+   "bash",
+   "-c"
+  ],
+  "imageName": "vllm/vllm-openai:v0.32.0",
+  "start_cmd_len": 6878
+ }
+}

@@ -70,11 +70,11 @@ def create(a):
     if not 200 <= st < 300:
         call("DELETE", f"{REST}/templates/{tpl['id']}", k); sys.exit(f"endpoint {st}: {ep}")
     plan = [{"turn": i, "gap": g, "sess": i % a.sessions, "sturn": i // a.sessions}  # sessions take turns: A, B, A, B, ...
-            for i, g in enumerate([None] + [float(x) for x in a.gaps.split(",")])]
+            for i, g in enumerate([None] + [float(x) for x in a.gaps.split(",") if x])] if a.gaps != "none" else []
     if a.probe:
         plan = [{"turn": -1, "gap": None, "probe": True}] + plan
     save(out, {"arm": a.arm, "eid": ep["id"], "tpl": tpl["id"], "session": f"{a.arm}-{a.session}", "plan": plan, "i": 0, "job": None,
-               "last_done": None, "sessions": a.sessions, "base_items": a.base_items, "turn_items": a.turn_items, "max_workers": a.max_workers,
+               "last_done": None, "sessions": a.sessions, "clean_kv": a.clean_kv, "base_items": a.base_items, "turn_items": a.turn_items, "max_workers": a.max_workers,
                "endpoint": {x: ep.get(x) for x in ("idleTimeout", "flashboot", "gpuTypeIds", "networkVolumeId", "workersMax")},
                "template_echo": {x: tpl.get(x) for x in ("dockerEntrypoint", "dockerStartCmd", "imageName") if x != "dockerStartCmd"} | {"start_cmd_len": len(str(tpl.get("dockerStartCmd")))}})
     print(f"created endpoint {ep['id']} template {tpl['id']} arm {a.arm}: {json.dumps(load(out)['endpoint'])}")
@@ -101,7 +101,7 @@ def step(a):
             time.sleep(max(0.0, due - time.time()))
             if s["i"] == 0:
                 call("PATCH", f"{REST}/endpoints/{eid}", k, {"workersMax": s["max_workers"]}); time.sleep(4)
-            body = {"input": {"probe": True} if p.get("probe") else {"prompt": prompt(f"{s['session']}-{p.get('sess', 0)}" if p.get("sess") is not None and s.get("sessions", 1) > 1 else s["session"],
+            body = {"input": {"probe": True, "clean_kv": bool(s.get("clean_kv"))} if p.get("probe") else {"prompt": prompt(f"{s['session']}-{p.get('sess', 0)}" if p.get("sess") is not None and s.get("sessions", 1) > 1 else s["session"],
                                                                                       p.get("sturn", p["turn"]), s["base_items"], s["turn_items"])}}
             h0 = health(k, eid)
             for _ in range(20):
@@ -120,7 +120,7 @@ def step(a):
             row = {"arm": s["arm"], "turn": p["turn"], "sess": p.get("sess", 0), "sturn": p.get("sturn", p["turn"]), "gap_s": p["gap"], "status": r["status"], "wall_s": round(now - s["job"]["t_submit"], 2),
                    "delay_s": round((r.get("delayTime") or 0) / 1000, 2), "exec_s": round((r.get("executionTime") or 0) / 1000, 2),
                    "job_worker": r.get("workerId"), "t_submit": s["job"]["t_submit"], "t_done": now,
-                   "health_at_submit": s["job"]["health_at_submit"], "health_at_done": health(k, eid), "out": r.get("output") if r["status"] == "COMPLETED" else str(r)[:800]}
+                   "health_at_submit": s["job"]["health_at_submit"], "health_at_done": health(k, eid), "out": r.get("output") if r["status"] == "COMPLETED" else str(r)[-4000:]}
             with open(rows, "a") as f:
                 f.write(json.dumps(row) + "\n")
             o = row["out"] if isinstance(row["out"], dict) else {}
@@ -154,7 +154,7 @@ c.add_argument("--fs", type=int, default=0); c.add_argument("--block-size", type
 c.add_argument("--volume-id", required=True); c.add_argument("--image", default=IMAGE); c.add_argument("--model", default="Qwen/Qwen3-8B")
 c.add_argument("--max-model-len", type=int, default=28000); c.add_argument("--gaps", default="0,10,60,300"); c.add_argument("--session", default="s1")
 c.add_argument("--base-items", type=int, default=1500); c.add_argument("--turn-items", type=int, default=40); c.add_argument("--max-workers", type=int, default=1)
-c.add_argument("--probe", type=int, default=0); c.add_argument("--sessions", type=int, default=1); c.add_argument("--gpu", action="append")
+c.add_argument("--probe", type=int, default=0); c.add_argument("--sessions", type=int, default=1); c.add_argument("--clean-kv", type=int, default=0); c.add_argument("--gpu", action="append")
 sub.choices["step"].add_argument("--budget", type=float, default=150)
 a = ap.parse_args()
 if a.cmd == "create" and not a.gpu:

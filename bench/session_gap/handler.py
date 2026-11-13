@@ -23,6 +23,7 @@ def _engine():
             args = AsyncEngineArgs(model=os.environ.get("MODEL_NAME", "Qwen/Qwen3-8B"),
                                    max_model_len=int(os.environ.get("MAX_MODEL_LEN", "32000")),
                                    gpu_memory_utilization=float(os.environ.get("GPU_MEM_UTIL", "0.9")),
+                                   max_num_seqs=int(os.environ.get("MAX_NUM_SEQS", "8")),  # hybrid models need one Mamba block per sequence
                                    enable_prefix_caching=True, **kw)
             STATE["engine"] = AsyncLLM.from_engine_args(args)
             STATE["engine_ready_s"] = round(time.time() - t, 2)
@@ -55,12 +56,32 @@ def _env():
     return out
 
 
+def _volume(clean):
+    """Bytes per top-level directory of the network volume; optionally remove this benchmark's KV block files."""
+    root = "/runpod-volume"; out = {}
+    if clean and os.path.isdir(f"{root}/kv_gap"):
+        shutil.rmtree(f"{root}/kv_gap", ignore_errors=True)
+    try:
+        for d in sorted(os.listdir(root)):
+            n = b = 0
+            for dp, _, fs in os.walk(os.path.join(root, d)):
+                for f in fs:
+                    try:
+                        b += os.lstat(os.path.join(dp, f)).st_blocks * 512; n += 1
+                    except OSError:
+                        pass
+            out[d] = {"files": n, "gb": round(b / 2**30, 2)}
+    except Exception as e:  # noqa: BLE001
+        out["error"] = repr(e)[:200]
+    return {"volume_dirs": out}
+
+
 async def handler(job):
     from vllm import SamplingParams
     t_in = time.time()
     inp = job.get("input", {})
     if inp.get("probe"):  # no engine: what does a worker look like before any model work
-        return {"probe": True, **_env()}
+        return {"probe": True, **_volume(inp.get("clean_kv")), **_env()}
     eng = _engine()
     if eng is None:
         return {"error": STATE["engine_error"], **_env()}

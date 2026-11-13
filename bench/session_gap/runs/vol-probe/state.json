@@ -1,0 +1,38 @@
+{
+ "arm": "vol-probe",
+ "eid": "9kocfuh0prmrtg",
+ "tpl": "z1fy86ixt6",
+ "session": "vol-probe-s1",
+ "plan": [
+  {
+   "turn": -1,
+   "gap": null,
+   "probe": true
+  }
+ ],
+ "i": 1,
+ "job": null,
+ "last_done": 1794591446.6316445,
+ "sessions": 1,
+ "clean_kv": 0,
+ "base_items": 1500,
+ "turn_items": 40,
+ "max_workers": 1,
+ "endpoint": {
+  "idleTimeout": 5,
+  "flashboot": true,
+  "gpuTypeIds": [
+   "NVIDIA GeForce RTX 4090"
+  ],
+  "networkVolumeId": "ja56pxcrgv",
+  "workersMax": 3
+ },
+ "template_echo": {
+  "dockerEntrypoint": [
+   "bash",
+   "-c"
+  ],
+  "imageName": "vllm/vllm-openai:v0.32.0",
+  "start_cmd_len": 6878
+ }
+}
